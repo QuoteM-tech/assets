@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuoteM — Email Signature Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#16a34a; --teal:#16c6b0; --ink:#0b1f2e; --ink2:#15132b;
+    --muted:#5a6573; --line:#e6ebf0; --bg:#eef1f4; --panel:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink2)}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+  header.top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  header.top .mark{width:30px;height:32px}
+  header.top h1{font-size:20px;font-weight:800;letter-spacing:-.02em;margin:0;color:var(--ink)}
+  header.top .tag{font-size:12.5px;font-weight:600;color:var(--green);margin-left:2px}
+  .sub{color:var(--muted);font-size:14px;margin:2px 0 24px;max-width:680px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .card h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 16px}
+  label{display:block;font-size:12.5px;font-weight:600;color:#3a4351;margin:14px 0 5px}
+  label:first-of-type{margin-top:0}
+  input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:14px;color:var(--ink2);background:#fbfcfd}
+  input[type=text]:focus{outline:2px solid var(--teal);outline-offset:-1px;border-color:var(--teal)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .toggle{display:flex;align-items:center;gap:9px;margin-top:16px;font-size:13.5px;font-weight:600;color:#3a4351;cursor:pointer;user-select:none}
+  .toggle input{width:16px;height:16px;accent-color:var(--green)}
+  #qr-mode-wrap{transition:opacity .15s}
+  .seg{display:flex;gap:6px;margin-top:6px}
+  .seg-opt{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:600;color:#3a4351;background:#fbfcfd;border:1px solid var(--line);border-radius:9px;padding:9px 8px;cursor:pointer;user-select:none;margin:0}
+  .seg-opt input{accent-color:var(--green);margin:0}
+  .seg-opt:has(input:checked){border-color:var(--green);background:#e8f7ee;color:#0e2230}
+  .previewhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+  .previewhead h2{margin:0}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button{font:inherit;font-weight:700;font-size:13px;border:none;border-radius:9px;padding:10px 16px;cursor:pointer;transition:filter .15s,transform .05s}
+  button:active{transform:translateY(1px)}
+  .primary{background:linear-gradient(135deg,var(--green),var(--teal));color:#fff}
+  .ghost{background:#eef2f6;color:#33384a}
+  .primary:hover,.ghost:hover{filter:brightness(1.05)}
+  .stage{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;overflow:auto}
+  .note{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.55}
+  .note code{background:#eef2f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;padding:12px 20px;border-radius:10px;opacity:0;pointer-events:none;transition:all .25s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  details.help{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 16px}
+  details.help summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--ink);padding:12px 0}
+  details.help .body{font-size:13px;color:#3a4351;line-height:1.6;padding-bottom:14px}
+  details.help ol{margin:6px 0 0;padding-left:20px}
+  details.help li{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <img class="mark" id="brandmark" alt="QuoteM">
+    <h1>quotem</h1>
+    <span class="tag">Signature Generator</span>
+  </header>
+  <p class="sub">Fill in an employee's details and copy a signature that renders correctly in Gmail and Outlook. Built with email-safe tables and inline styles — no flexbox, gradients-as-layout, or inline SVG that clients strip.</p>
+
+  <div class="grid">
+    <!-- FORM -->
+    <div class="card">
+      <h2>Employee details</h2>
+      <label for="f-name">Full name</label>
+      <input type="text" id="f-name" value="Mohammed Alsaady">
+      <label for="f-title">Job title</label>
+      <input type="text" id="f-title" value="Managing Director">
+      <label for="f-email">Email</label>
+      <input type="text" id="f-email" value="mohammed@quotem.tech">
+      <label for="f-phone">Phone</label>
+      <input type="text" id="f-phone" value="+966 53 666 0593">
+      <label for="f-loc">Location</label>
+      <input type="text" id="f-loc" value="Riyadh, Kingdom of Saudi Arabia">
+      <label for="f-web">Website</label>
+      <input type="text" id="f-web" value="www.quotem.tech">
+      <div class="row2">
+        <div><label for="f-li">LinkedIn URL</label><input type="text" id="f-li" placeholder="https://linkedin.com/in/…"></div>
+        <div><label for="f-x">X URL</label><input type="text" id="f-x" placeholder="https://x.com/…"></div>
+      </div>
+      <label for="f-ig">Instagram URL</label>
+      <input type="text" id="f-ig" placeholder="https://instagram.com/…">
+      <label class="toggle"><input type="checkbox" id="f-qr" checked> Include QR panel (links to website)</label>
+    </div>
+
+    <!-- PREVIEW -->
+    <div>
+      <div class="previewhead">
+        <h2 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Live preview</h2>
+        <div class="btns">
+          <button class="ghost" id="btn-html">Copy HTML</button>
+          <button class="primary" id="btn-rich">Copy signature</button>
+        </div>
+      </div>
+      <div class="stage" id="stage"></div>
+      <p class="note"><strong>Copy signature</strong> puts the rendered signature on your clipboard — paste straight into Gmail Settings → Signature, or Outlook. <strong>Copy HTML</strong> gives the raw source for IT to deploy in bulk. Logo is embedded so it always shows; for Outlook desktop at scale, host <code>quotem-icon.png</code> and swap the logo <code>src</code> for a URL.</p>
+
+      <details class="help">
+        <summary>How to install (Gmail &amp; Outlook)</summary>
+        <div class="body">
+          <ol>
+            <li><strong>Gmail:</strong> click <em>Copy signature</em> → Settings (gear) → See all settings → General → Signature → paste → Save changes.</li>
+            <li><strong>Outlook (web):</strong> Settings → Mail → Compose and reply → paste into the signature box.</li>
+            <li><strong>Outlook (desktop):</strong> use <em>Copy signature</em> and paste into File → Options → Mail → Signatures. If the logo drops, host the image and use the HTML version.</li>
+            <li><strong>Bulk deploy:</strong> use <em>Copy HTML</em> per employee, or hand IT the pattern to script from a staff list.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// ============================================================================
+// HOSTED ASSETS — images are served from GitHub so they render in Outlook too.
+// If the repo/branch/host ever changes, update ONLY this base URL.
+// The repo MUST stay public or images will break.
+// ============================================================================
+const ASSET_BASE = "https://raw.githubusercontent.com/QuoteM-tech/assets/main";
+const QUOTEM_LOGO_URL = ASSET_BASE + "/logo/quotem-icon.png";
+const ICONS = {
+  ic_email:    ASSET_BASE + "/icons/icon-email.png",
+  ic_phone:    ASSET_BASE + "/icons/icon-phone.png",
+  ic_loc:      ASSET_BASE + "/icons/icon-location.png",
+  ic_web:      ASSET_BASE + "/icons/icon-web.png",
+  soc_li:      ASSET_BASE + "/icons/icon-linkedin.png",
+  soc_x:       ASSET_BASE + "/icons/icon-x.png",
+  soc_ig:      ASSET_BASE + "/icons/icon-instagram.png"
+};
+// Static QR pointing to the website — one hosted file, renders in Outlook, no
+// external QR service.
+const QR_WEBSITE_URL = ASSET_BASE + "/qr/quotem-qr-website.png";
+// Embedded logo kept only for the on-page preview header (not the signature output).
+const QUOTEM_LOGO_B64 = "data:image/png;base64,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";
+document.getElementById('brandmark').src = QUOTEM_LOGO_B64;
+
+const $ = id => document.getElementById(id);
+const fields = ['f-name','f-title','f-email','f-phone','f-loc','f-web','f-li','f-x','f-ig'];
+const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// Per-person QR served as a real PNG from a URL (not base64), so it renders in
+// Outlook.
+// Icons are hosted PNGs (defined in ICONS at the top) so they render everywhere,
+// including Outlook.
+function iconCell(key){
+  return `<td width="26" valign="middle" style="padding:0 10px 0 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="26" style="width:26px;"><tr>
+      <td width="26" height="26" align="center" valign="middle" bgcolor="#e8f7ee" style="width:26px;height:26px;background:#e8f7ee;border-radius:50%;">
+        <img src="${ICONS[key]}" width="15" height="15" alt="" style="display:inline-block;vertical-align:middle;border:0;">
+      </td>
+    </tr></table></td>`;
+}
+function row(iconKey, inner){
+  return `<tr><td style="padding:0 0 9px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${iconCell(iconKey)}<td valign="middle" style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:13px;color:#33384a;font-weight:500;line-height:1.3;">${inner}</td></tr></table></td></tr>`;
+}
+
+function buildSignature(v){
+  const web = v.web.replace(/^https?:\/\//,'');
+  const socials = [];
+  if(v.li) socials.push(`<a href="${esc(v.li)}" style="text-decoration:none;"><img src="${ICONS.soc_li}" width="18" height="18" alt="LinkedIn" style="display:inline-block;border:0;"></a>`);
+  if(v.x)  socials.push(`<a href="${esc(v.x)}" style="text-decoration:none;"><img src="${ICONS.soc_x}" width="16" height="16" alt="X" style="display:inline-block;border:0;"></a>`);
+  if(v.ig) socials.push(`<a href="${esc(v.ig)}" style="text-decoration:none;"><img src="${ICONS.soc_ig}" width="18" height="18" alt="Instagram" style="display:inline-block;border:0;"></a>`);
+  const socialRow = socials.length ? `<tr><td style="padding-top:10px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${socials.map(s=>`<td valign="middle" style="padding-right:14px;">${s}</td>`).join('')}</tr></table></td></tr>` : '';
+
+  let contactRows = '';
+  if(v.email) contactRows += row('ic_email', `<a href="mailto:${esc(v.email)}" style="color:#33384a;text-decoration:none;">${esc(v.email)}</a>`);
+  if(v.phone) contactRows += row('ic_phone', `<a href="tel:${esc(v.phone.replace(/\s+/g,''))}" style="color:#33384a;text-decoration:none;font-weight:600;">${esc(v.phone)}</a>`);
+  if(v.loc)   contactRows += row('ic_loc', esc(v.loc));
+  if(v.web)   contactRows += row('ic_web', `<a href="https://${esc(web)}" style="color:#33384a;text-decoration:none;">${esc(web)}</a>`);
+
+  const webFull = 'https://' + web;
+  const qrPanel = v.qr ? `
+      <td width="150" valign="middle" align="center" style="width:150px;padding:20px 18px;border-left:1px solid #edf0f3;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td align="center">
+          <img src="${QR_WEBSITE_URL}" width="104" height="104" alt="Scan to visit our website" style="display:block;border:0;">
+          <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#5a6573;margin-top:9px;line-height:1.3;">Scan to visit our website</div>
+          <a href="${esc(webFull)}" style="display:inline-block;margin-top:10px;background:#16a34a;color:#ffffff;font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:8px 16px;border-radius:8px;text-decoration:none;">Visit Website</a>
+        </td></tr></table>
+      </td>` : '';
+
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#ffffff;border:1px solid #eaedf0;border-radius:12px;max-width:${v.qr?'520':'380'}px;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <tr>
+    <td valign="top" style="padding:20px 22px 18px 22px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td valign="middle" style="padding-right:8px;"><img src="${QUOTEM_LOGO_URL}" height="24" alt="Quotem" style="display:block;border:0;"></td>
+        <td valign="middle" style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:18px;font-weight:800;color:#0e2230;letter-spacing:-0.02em;">quotem</td>
+      </tr></table>
+      <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:11px;font-weight:600;color:#16a34a;margin-top:6px;">Procurement powered by intelligence</div>
+      <div style="height:1px;background:#edf0f3;line-height:1px;font-size:1px;margin:14px 0;">&nbsp;</div>
+      <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:17px;font-weight:800;color:#15132b;letter-spacing:-0.01em;line-height:1.15;">${esc(v.name)}</div>
+      <div style="font-family:'Plus Jakarta Sans',Arial,sans-serif;font-size:13px;font-weight:600;color:#5a6573;margin:3px 0 14px;">${esc(v.title)}</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">${contactRows}${socialRow}</table>
+    </td>
+    ${qrPanel}
+  </tr>
+</table>`;
+}
+
+function collect(){
+  return {
+    name:$('f-name').value, title:$('f-title').value, email:$('f-email').value,
+    phone:$('f-phone').value, loc:$('f-loc').value, web:$('f-web').value,
+    li:$('f-li').value, x:$('f-x').value, ig:$('f-ig').value, qr:$('f-qr').checked
+  };
+}
+function render(){ $('stage').innerHTML = buildSignature(collect()); }
+fields.forEach(f=>$(f).addEventListener('input',render));
+$('f-qr').addEventListener('change',render);
+
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
+
+$('btn-html').addEventListener('click',async()=>{
+  const html = buildSignature(collect());
+  try{ await navigator.clipboard.writeText(html); toast('HTML copied'); }
+  catch(e){ const ta=document.createElement('textarea'); ta.value=html; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('HTML copied'); }
+});
+$('btn-rich').addEventListener('click',async()=>{
+  const html = buildSignature(collect());
+  try{
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/html': new Blob([html],{type:'text/html'}),
+      'text/plain': new Blob([html],{type:'text/plain'})
+    })]);
+    toast('Signature copied — paste into your email settings');
+  }catch(e){
+    const ta=document.createElement('textarea'); ta.value=html; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    toast('Copied as HTML');
+  }
+});
+
+render();
+</script>
+</body>
+</html>

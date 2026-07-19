@@ -1,33 +1,24 @@
-# Quotem — Brand Asset Pack
+# QuoteM Email Assets
 
-ملف الأصول الخاص بتوقيع إيميل Quotem.
+Public image assets for QuoteM email signatures. **This repo must stay public** — if it's made private, signature images will break.
 
-## المحتويات
+## Raw URLs (use these in email HTML)
 
-### /logo
-- `quotem-icon.png` — أيقونة اللوجو (مقصوصة، خلفية شفافة)
-- `quotem-logo-original.png` — اللوجو الأصلي كما تم رفعه
+Base: `https://raw.githubusercontent.com/QuoteM-tech/assets/main/`
 
-### /icons  (SVG — قابلة للتكبير بأي حجم، لون البراند الأخضر #16a34a)
-- `icon-email.svg`
-- `icon-phone.svg`
-- `icon-location.svg`
-- `icon-web.svg`
-- `icon-linkedin.svg`
-- `icon-x.svg`
-- `icon-instagram.svg`
+| Asset | URL |
+|-------|-----|
+| Logo | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/logo/quotem-icon.png` |
+| Email icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-email.png` |
+| Phone icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-phone.png` |
+| Location icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-location.png` |
+| Web icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-web.png` |
+| LinkedIn icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-linkedin.png` |
+| X icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-x.png` |
+| Instagram icon | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/icons/icon-instagram.png` |
+| Website QR | `https://raw.githubusercontent.com/QuoteM-tech/assets/main/qr/quotem-qr-website.png` |
 
-### /qr
-- `quotem-qr-vcard.png` — كود QR يحفظ جهة اتصال Mohammed Alsaady عند المسح (vCard)
-
-### /signature
-- `quotem-signature.png` — التوقيع النهائي كصورة (جاهزة للّصق في Gmail / Outlook / Figma)
-- `quotem-signature.html` — نسخة HTML بروابط شغّالة (إيميل / تليفون / Save Contact)
-
-## ألوان البراند
-- أخضر أساسي: `#16a34a`
-- تركوازي: `#16c6b0`
-- كحلي (داكن): `#0b1f2e`
-
-## الخط
-Plus Jakarta Sans
+## Setup
+1. Create a **public** repo named `assets` under the `QuoteM-tech` org.
+2. Upload the `logo/`, `icons/`, and `qr/` folders (keep this structure).
+3. Confirm a raw URL opens the image directly in a browser (not a GitHub page).
